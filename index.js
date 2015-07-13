@@ -16,7 +16,7 @@ if (process.env.VCAP_SERVICES) {
   if (orchestrateConfig) {
     var node = orchestrateConfig[0];
     orchestrate_api_key = node.credentials.ORCHESTRATE_API_KEY
-    orchestrate_api_url = node.credentials.ORCHESTRATE_API_URL
+    orchestrate_api_url = node.credentials.ORCHESTRATE_API_HOST
   }
 }
 
