@@ -3,5 +3,6 @@ applications:
 - name: whereubeen
   memory: 256M
   instances: 1
+  host: whereubeen-${random-word}
   services:
     - wub-orchestrate
