@@ -2,7 +2,18 @@
 
 Demo application for Orchestrate and its location capabilities along with AppFog deployment.
 
-# Running Application
+## Setup Local Development Environment
+
+For local development we must setup two environment variables in our current terminal shell. You can get these from your Orchestrate database dashboard.
+
+```
+$ export ORCHESTRATE_API_KEY=[YOUR API KEY]
+$ export ORCHESTRATE_API_HOST=[YOUR API HOST (i.e. api.ctl-uc1-a.orchestrate.io)]
+```
+
+## Running Application
+
+After the environment variables are exported in your terminal's shell session you can start the application.
 
 ```
 $ npm install
