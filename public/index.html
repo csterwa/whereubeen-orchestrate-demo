@@ -1,0 +1,82 @@
+<!doctype html>
+<html ng-app="wubApp">
+<head>
+	<title>Where U Been?</title>
+	<link rel="stylesheet" href="bootstrap-css/css/bootstrap.min.css">
+	<link rel="stylesheet" href="fontawesome/css/font-awesome.min.css">
+	<script type="text/javascript" src="angular/angular.min.js"></script>
+	<script type="text/javascript" src="angular-resource/angular-resource.min.js"></script>
+	<script type="text/javascript" src="scripts/ui-bootstrap-tpls-0.13.0.min.js"></script>
+	<script type="text/javascript" src="scripts/app.js"></script>
+	<script type="text/javascript" src="scripts/service.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Where U Been?</a>
+	    </div>
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<tabset justified="true">
+    	<tab heading="Locations">
+	    	<div class="container" ng-controller="LocationController">
+	    		<div class="row">
+	    			<div class="col-md-4">
+	    				<h3>Add Location</h3>
+	    				<form>
+						  	<div class="form-group">
+								<label for="locationName">Name of Location</label>
+								<input type="text" class="form-control" id="locationName" ng-model="locationName" ng-enter="findLocation(locationName)"/>
+							</div>
+							<div>
+								<span ng-if="(locationLatitude && locationLongitude)">Latitude: {{ locationLatitude }}, Longitude: {{ locationLongitude }}</span>
+							</div>
+						  <button type="submit" class="btn btn-default" ng-if="(locationLatitude && locationLongitude)" ng-click="addLocation()">Add</button>
+						</form>
+	    			</div>
+	    			<div class="col-md-6 col-md-offset-2">
+	    				<h3>Locations</h3>
+	    				<ul>
+	    					<li ng-repeat="loc in locations">
+	    						{{loc.value.name}} <i class="fa fa-trash-o" ng-click="deleteLocation(loc.path.key)"></i>
+	    					</li>
+	    				</ul>
+	    			</div>
+	    		</div>
+    		</div>
+    	</tab>
+	    <tab heading="Find Locations">
+	    	<div class="container" ng-controller="LocationController">
+	    		<div class="row">
+	    			<div class="col-md-4">
+	    				<h3>Find Location</h3>
+	    				<form>
+						  	<div class="form-group">
+								<label for="nearLocationName">Location Near</label>
+								<input type="text" class="form-control" id="nearLocationName" ng-model="nearLocationName"/>
+							</div>
+						  <button type="submit" class="btn btn-default" ng-click="findLocationNear(nearLocationName)">Find Within 100 Miles</button>
+						</form>
+	    			</div>
+	    			<div class="col-md-6 col-md-offset-2" ng-if="foundLocations">
+	    				<h3>Found Locations</h3>
+	    				<ul>
+	    					<li ng-repeat="loc in foundLocations">
+	    						{{loc.value.name}}
+	    					</li>
+	    				</ul>
+	    			</div>
+	    		</div>
+	    	</div>
+	    </tab>
+	</tabset>
+</body>
+</html>

@@ -1,0 +1,7 @@
+---
+applications:
+- name: whereubeen
+  memory: 256M
+  instances: 1
+  services:
+    - wub-orchestrate
