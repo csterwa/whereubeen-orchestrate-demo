@@ -46,6 +46,7 @@ app.post('/location', function (req, res) {
 
 app.get('/location', function(req, res) {
 	console.log('called location GET', req.query);
+	req.query.limit = 100;
 	db.list('location', req.query)
 	.then(function(result) {
 		res.send(result);
