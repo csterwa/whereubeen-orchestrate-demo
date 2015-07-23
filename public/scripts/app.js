@@ -1,13 +1,35 @@
-angular.module('wubApp', ['ui.bootstrap', 'wubServices'])
-  .controller('LocationController', function($scope, $http, Location) {
+angular.module('wubApp', ['ui.bootstrap', 'uiGmapgoogle-maps', 'wubServices'])
+  .config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+	    //    key: 'your api key',
+	    v: '3.17',
+	    libraries: 'weather,geometry,visualization'
+	})
+  })
+  .controller('LocationController', function($scope, $http, uiGmapGoogleMapApi, Location) {
   	var locationCtl = this;
+
+  	$scope.map = { center: { latitude: 47.610377, longitude: -122.2006786 }, zoom: 6 };
   	$scope.locations = [];
 
 	locationCtl._updateLocations = function() {
 		Location.query(function(data) {
-			console.log('locations', data.body.results);
-			$scope.locations = data.body.results;
+			console.log('API locations', data.body.results);
+			locationCtl._setLocations(data.body.results);
 		});
+	};
+
+	locationCtl._setLocations = function(data) {
+		var retrievedLocations = [];
+		_.forEach(data, function(locationResult) {
+			retrievedLocations.push({
+				id: locationResult.path.key,
+				name: locationResult.value.name,
+				location: locationResult.value.location
+			});
+		});
+		console.log('locations in scope:', retrievedLocations);
+		$scope.locations = retrievedLocations;
 	};
 
 	$scope.deleteLocation = function(id) {
@@ -37,16 +59,16 @@ angular.module('wubApp', ['ui.bootstrap', 'wubServices'])
 		});
 	};
 
-	$scope.findLocationNear = function(name) {
+	$scope.findLocationNear = function(name, radius) {
 		var geocodeUrl = "http://maps.google.com/maps/api/geocode/json?address=" + encodeURIComponent(name) + "&sensor=false";
 		$http.get(geocodeUrl)
 		.success(function(data) {
 			var locationData = data.results[0].geometry.location;
-			var locationQuery = "value.location:NEAR:{lat:" + locationData.lat + " lon:" + locationData.lng + " radius:100mi}";
+			var locationQuery = "value.location:NEAR:{lat:" + locationData.lat + " lon:" + locationData.lng + " radius:" + radius + "mi}";
 			Location.get({query: locationQuery},
 				function(data) {
 					console.log('found near ' + name, data.body);
-					$scope.foundLocations = data.body.results;
+					locationCtl._setLocations(data.body.results);
 				});
 		})
 		.error(function(data) {
@@ -70,6 +92,10 @@ angular.module('wubApp', ['ui.bootstrap', 'wubServices'])
 			console.log('error:', err);
 		});
 	};
+
+	uiGmapGoogleMapApi.then(function(maps) {
+		console.log('map is ready:', maps);
+    });
 
   	locationCtl._updateLocations();
   })

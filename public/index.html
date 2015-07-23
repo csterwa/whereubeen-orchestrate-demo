@@ -7,8 +7,14 @@
 	<script type="text/javascript" src="angular/angular.min.js"></script>
 	<script type="text/javascript" src="angular-resource/angular-resource.min.js"></script>
 	<script type="text/javascript" src="scripts/ui-bootstrap-tpls-0.13.0.min.js"></script>
+	<script type="text/javascript" src="lodash/lodash.min.js"></script>
+	<script type="text/javascript" src="angular-google-maps/dist/angular-google-maps.min.js"></script>
 	<script type="text/javascript" src="scripts/app.js"></script>
 	<script type="text/javascript" src="scripts/service.js"></script>
+	<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+	<style type="text/css">
+		.angular-google-map-container { height: 400px; }
+	</style>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -25,58 +31,55 @@
 	    </div>
 	  </div><!-- /.container-fluid -->
 	</nav>
-	<tabset justified="true">
-    	<tab heading="Locations">
 	    	<div class="container" ng-controller="LocationController">
 	    		<div class="row">
-	    			<div class="col-md-4">
+	    			<div class="col-md-3">
+					<tabset justified="true">
+				    	<tab heading="Locations">
 	    				<h3>Add Location</h3>
 	    				<form>
 						  	<div class="form-group">
-								<label for="locationName">Name of Location</label>
-								<input type="text" class="form-control" id="locationName" ng-model="locationName" ng-enter="findLocation(locationName)"/>
+								<input type="text" class="form-control" id="locationName" placeholder="Enter Location and Hit Enter" ng-model="locationName" ng-enter="findLocation(locationName)"/>
 							</div>
 							<div>
-								<span ng-if="(locationLatitude && locationLongitude)">Latitude: {{ locationLatitude }}, Longitude: {{ locationLongitude }}</span>
+								<span ng-if="(locationLatitude && locationLongitude)">Latitude: {{ locationLatitude }},<br/>Longitude: {{ locationLongitude }}</span>
 							</div>
-						  <button type="submit" class="btn btn-default" ng-if="(locationLatitude && locationLongitude)" ng-click="addLocation()">Add</button>
+						  <button type="submit" class="btn btn-default" ng-if="(locationLatitude && locationLongitude)" ng-click="addLocation()">Add to Known Locations</button>
 						</form>
-	    			</div>
-	    			<div class="col-md-6 col-md-offset-2">
-	    				<h3>Locations</h3>
-	    				<ul>
-	    					<li ng-repeat="loc in locations">
-	    						{{loc.value.name}} <i class="fa fa-trash-o" ng-click="deleteLocation(loc.path.key)"></i>
-	    					</li>
-	    				</ul>
-	    			</div>
-	    		</div>
-    		</div>
-    	</tab>
-	    <tab heading="Find Locations">
-	    	<div class="container" ng-controller="LocationController">
-	    		<div class="row">
-	    			<div class="col-md-4">
+						<ul>
+                           <li ng-repeat="loc in locations">
+                               {{loc.name}} <i class="fa fa-trash-o" ng-click="deleteLocation(loc.id)"></i>
+                           </li>
+                       </ul>
+
+			    	</tab>
+				    <tab heading="Find Locations">
 	    				<h3>Find Location</h3>
 	    				<form>
 						  	<div class="form-group">
 								<label for="nearLocationName">Location Near</label>
-								<input type="text" class="form-control" id="nearLocationName" ng-model="nearLocationName"/>
+								<input type="text" class="form-control" id="nearLocationName" placeholder="Enter Location" ng-model="nearLocationName"/>
+								<input type="number" class="form-control" id="radiusInMiles" placeholder="Enter Radius in Miles" ng-model="radiusInMiles"/>
 							</div>
-						  <button type="submit" class="btn btn-default" ng-click="findLocationNear(nearLocationName)">Find Within 100 Miles</button>
+						  <button type="submit" class="btn btn-default" ng-click="findLocationNear(nearLocationName, radiusInMiles)">Find Locations within Radius</button>
 						</form>
+						<ul>
+                           <li ng-repeat="loc in locations">
+                               {{loc.name}}
+                           </li>
+                       </ul>
+					    </tab>
+					</tabset>
 	    			</div>
-	    			<div class="col-md-6 col-md-offset-2" ng-if="foundLocations">
-	    				<h3>Found Locations</h3>
-	    				<ul>
-	    					<li ng-repeat="loc in foundLocations">
-	    						{{loc.value.name}}
-	    					</li>
-	    				</ul>
+	    			<div class="col-md-8 col-md-offset-1">
+	    				<h3>Known Locations</h3>
+	    				<div>
+	    					<ui-gmap-google-map center="map.center" zoom="map.zoom">
+	    						<ui-gmap-markers models='locations' fit="true" coords="'location'"></ui-gmap-markers>
+	    					</ui-gmap-google-map>
+	    				</div>
 	    			</div>
 	    		</div>
-	    	</div>
-	    </tab>
-	</tabset>
+    		</div>
 </body>
 </html>
