@@ -44,7 +44,7 @@
 							<div>
 								<span ng-if="(locationLatitude && locationLongitude)">Latitude: {{ locationLatitude }},<br/>Longitude: {{ locationLongitude }}</span>
 							</div>
-						  <button type="submit" class="btn btn-default" ng-if="(locationLatitude && locationLongitude)" ng-click="addLocation()">Add to Known Locations</button>
+						  <button type="submit" class="btn btn-default" ng-if="(locationLatitude && locationLongitude)" ng-click="addLocation(locationName)">Add to Known Locations</button>
 						</form>
 						<ul>
 	                       <li ng-repeat="loc in locations">

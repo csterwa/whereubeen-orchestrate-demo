@@ -76,13 +76,14 @@ angular.module('wubApp', ['ui.bootstrap', 'uiGmapgoogle-maps', 'wubServices'])
 		});
 	};
 
-	$scope.addLocation = function() {
+	$scope.addLocation = function(name) {
 		Location.save({
-			name: $scope.locationName,
+			name: name,
 			latitude: $scope.locationLatitude,
 			longitude: $scope.locationLongitude
 		},
 		function(result) {
+			console.log('saved location:', result);
 			$scope.locationName = undefined;
 			$scope.locationLatitude = undefined;
 			$scope.locationLongitude = undefined;
